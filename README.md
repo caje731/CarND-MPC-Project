@@ -3,6 +3,68 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Questionnaire
+
+## The Model
+
+_Student describes their model in detail. This includes the state, actuators and update equations._
+
+### State
+
+The state for the car is shown below as a vector:
+
+[x, y, ψ, v]
+
+x - x is the forward direction of the car<br />
+y - y is the lateral direction of the car<br />
+ψ - psi being the orientation<br />
+v - v being the velocity
+
+### Actuators
+
+The actuators for the car is shown below as a vector:
+
+[δ, a]
+
+δ - delta meaning the steering actuation<br />
+a - a being the acceleration called the throttle.
+
+### Update Equations
+
+The model updates with the following equations:
+
+`xt+1 = xt + vt ∗ cos(ψt) ∗ dt`<br />
+`yt+1 = yt + vt ∗ sin(ψt) ∗ dt`<br />
+`ψt+1 = ψt + (vt/L​f) ∗ δt ∗ dt`<br />
+`vt+1 = vt + at ∗ dt`<br />
+
+## Timestep Length and Elapsed Duration (N & dt)
+
+_Student discusses the reasoning behind the chosen N (timestep length) and dt (elapsed duration between timesteps) values. Additionally the student details the previous values tried._
+
+The values from the course worked well:
+N = 10 and dt = 0.1
+
+## Polynomial Fitting and MPC Preprocessing
+
+_A polynomial is fitted to waypoints. If the student preprocesses waypoints, the vehicle state, and/or actuators prior to the MPC procedure it is described._
+
+The processing for the polynomial was taken by using the VectorXd::Map to find the coordinates of the car and convert it to relay back into the system.
+
+## Model Predictive Control with Latency
+
+_The student implements Model Predictive Control that handles a 100 millisecond latency. Student provides details on how they deal with latency._
+
+The latency was simply factored into the formulae given in the course. Following is a sample:
+
+          `const double latency = 0.1;`
+          `px += v * cos(psi) * latency;`
+          `py += v * sin(psi) * latency;`
+          `psi -= (v / Lf) * delta * latency;`
+          `v += a * latency;`
+
+---
+
 ## Dependencies
 
 * cmake >= 3.5
@@ -19,7 +81,7 @@ Self-Driving Car Engineer Nanodegree Program
   * Run either `install-mac.sh` or `install-ubuntu.sh`.
   * If you install from source, checkout to commit `e94b6e1`, i.e.
     ```
-    git clone https://github.com/uWebSockets/uWebSockets 
+    git clone https://github.com/uWebSockets/uWebSockets
     cd uWebSockets
     git checkout e94b6e1
     ```
@@ -43,7 +105,7 @@ Self-Driving Car Engineer Nanodegree Program
        per this [forum post](https://discussions.udacity.com/t/incorrect-checksum-for-freed-object/313433/19).
   * Linux
     * You will need a version of Ipopt 3.12.1 or higher. The version available through `apt-get` is 3.11.x. If you can get that version to work great but if not there's a script `install_ipopt.sh` that will install Ipopt. You just need to download the source from the Ipopt [releases page](https://www.coin-or.org/download/source/Ipopt/).
-    * Then call `install_ipopt.sh` with the source directory as the first argument, ex: `sudo bash install_ipopt.sh Ipopt-3.12.1`. 
+    * Then call `install_ipopt.sh` with the source directory as the first argument, ex: `sudo bash install_ipopt.sh Ipopt-3.12.1`.
   * Windows: TODO. If you can use the Linux subsystem and follow the Linux instructions.
 * [CppAD](https://www.coin-or.org/CppAD/)
   * Mac: `brew install cppad`
